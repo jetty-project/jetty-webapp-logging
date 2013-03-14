@@ -33,3 +33,7 @@ target/
 # vim
 .*.sw[a-p]
 
+# Bad Test Exclusion
+# Usually means the logback.xml is missing a ${jetty.home} reference
+/logs/
+
