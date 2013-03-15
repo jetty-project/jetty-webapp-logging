@@ -10,8 +10,19 @@ public class MultiLoggingDistroTest
 {
     private static JettyDistro jetty;
     private static final String[] CONTEXTS =
-    { "test-war-commons_logging_1.0.3", "test-war-commons_logging_1.1", "test-war-java_util_logging", "test-war-log4j_1.2.15", "test-war-log4j_1.1.3",
-            "test-war-slf4j_1.2", "test-war-slf4j_1.5.6", "test-war-slf4j_1.6.1" };
+    { 
+        // @formatter:off
+        "test-war-commons_logging_1.0.3", 
+        "test-war-commons_logging_1.1", 
+        "test-war-java_util_logging", 
+        "test-war-log4j_1.2.15", 
+        "test-war-log4j_1.1.3",
+        "test-war-slf4j_1.2", 
+        "test-war-slf4j_1.5.6", 
+        "test-war-slf4j_1.6.1", 
+        "test-war-slf4j_1.6.6",
+        "test-war-slf4j_1.7.2"
+    };
 
     @BeforeClass
     public static void initJetty() throws Exception

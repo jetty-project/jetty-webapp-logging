@@ -9,8 +9,16 @@ import org.junit.Test;
 public class BasicDistroTest
 {
     private static JettyDistro jetty;
+    
     private static final String[] CONTEXTS =
-    { "test-war-commons_logging_1.1", "test-war-java_util_logging", "test-war-log4j_1.2.15", "test-war-slf4j_1.5.6" };
+    {
+        // @formatter:off
+        "test-war-commons_logging_1.1", 
+        "test-war-java_util_logging", 
+        "test-war-log4j_1.2.15", 
+        "test-war-slf4j_1.5.6"
+        // @formatter:on
+    };
 
     @BeforeClass
     public static void initJetty() throws Exception
