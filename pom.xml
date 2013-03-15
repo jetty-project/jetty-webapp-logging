@@ -49,6 +49,11 @@
     <test-libs-dir>${project.build.directory}/test-libs</test-libs-dir>
     <test-distro-dir>${project.build.directory}/test-dist</test-distro-dir>
   </properties>
+  <scm>
+    <connection>scm:git:git@github.com:jetty-project/jetty-webapp-logging.git</connection>
+    <developerConnection>scm:git:git@github.com:jetty-project/jetty-webapp-logging.git</developerConnection>
+    <url>http://github.com/jetty-project/jetty-webapp-logging</url>
+  </scm>
   <build>
     <plugins>
       <plugin>
