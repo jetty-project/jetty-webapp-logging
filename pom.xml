@@ -26,7 +26,7 @@
 
   <groupId>org.eclipse.jetty</groupId>
   <artifactId>jetty-webapp-logging</artifactId>
-  <version>9.0.0-SNAPSHOT</version>
+  <version>9.0.0</version>
   <name>Jetty :: Centralized WebApp Logging</name>
   <packaging>jar</packaging>
   <licenses>
