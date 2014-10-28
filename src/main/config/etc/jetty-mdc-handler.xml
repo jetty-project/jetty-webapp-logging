@@ -9,7 +9,7 @@
 
     <Set name="handler">
       <New id="mdcHandler" class="org.eclipse.jetty.webapp.logging.ContextLogHandler">
-        <Set name="handler"><Ref id="oldhandler" /></Set>
+        <Set name="handler"><Ref refid="oldhandler" /></Set>
       </New>
     </Set>
 </Configure>
