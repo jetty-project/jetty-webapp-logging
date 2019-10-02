@@ -20,6 +20,7 @@ package org.mortbay.jetty.webapp.logging.tests;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.client.HttpClient;
@@ -98,21 +99,20 @@ public class RollingFileLogDistroTest extends AbstractTest
 
                 HttpClient client = startHttpClient();
 
-                long now = System.currentTimeMillis();
-                long duration = (long)(1000 * 60 * (1.5)); // 1.5 minutes
-                long end = now + duration;
-                long left;
-                while (System.currentTimeMillis() < end)
+                Duration duration = Duration.ofMinutes(1).plusSeconds(30);
+                Duration every = Duration.ofSeconds(20);
+
+                while (!duration.isNegative())
                 {
-                    left = (end - System.currentTimeMillis());
-                    System.out.printf("%,d milliseconds left%n", left);
+                    System.out.printf("%s left%n", duration);
                     for (String context : CONTEXTS)
                     {
                         ContentResponse response = client.GET("http://localhost:" + httpPort + "/" + context + "/logging");
                         assertEquals(HttpStatus.OK_200, response.getStatus());
                         assertThat(response.getContentAsString(), not(containsString("Exception")));
                     }
-                    Thread.sleep(Math.min(20000, left)); // every 20s.
+                    Thread.sleep(Math.min(every.toMillis(), duration.toMillis()));
+                    duration = duration.minus(every);
                 }
             }
         }
