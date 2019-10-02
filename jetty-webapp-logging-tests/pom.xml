@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.mortbay.jetty.extras</groupId>
+    <artifactId>jetty-webapp-logging-parent</artifactId>
+    <version>9.4-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <groupId>org.mortbay.jetty.extras</groupId>
+  <artifactId>jetty-webapp-logging-tests</artifactId>
+  <version>9.4-SNAPSHOT</version>
+  <name>Jetty :: Tests :: Centralized WebApp Logging</name>
+  <packaging>jar</packaging>
+
+  <properties>
+    <slf4j.version>1.7.25</slf4j.version>
+    <logback.version>1.2.3</logback.version>
+    <jetty.version>9.4.20.v20190813</jetty.version>
+    <!-- simple wars setup to test logging -->
+    <jetty-test-wars.version>9.0.0.v20130315</jetty-test-wars.version>
+    <test-wars-dir>${project.build.directory}/test-wars</test-wars-dir>
+    <test-configs-dir>${project.build.directory}/test-configs</test-configs-dir>
+    <test-libs-dir>${project.build.directory}/test-libs</test-libs-dir>
+    <test-distro-dir>${project.build.directory}/test-dist</test-distro-dir>
+  </properties>
+
+  <dependencies>
+    <!-- Test Scope -->
+    <dependency>
+      <groupId>org.mortbay.jetty.extras</groupId>
+      <artifactId>jetty-webapp-logging</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.toolchain</groupId>
+      <artifactId>jetty-test-helper</artifactId>
+      <version>5.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty.extras</groupId>
+      <artifactId>jetty-home-tester</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <version>${jetty.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-home</artifactId>
+      <version>${jetty.version}</version>
+      <type>zip</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
