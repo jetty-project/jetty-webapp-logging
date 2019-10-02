@@ -57,13 +57,13 @@ public class BasicDistroTest extends AbstractTest
         File configJarFile = jetty.resolveArtifact("org.mortbay.jetty.extras:jetty-webapp-logging:jar:config:" + getProjectVersion());
         jetty.installConfigurationJar(configJarFile);
 
-        String[] args1 = {
+        String[] setupArgs = {
             "--approve-all-licenses",
             "--add-to-start=http,deploy,centralized-webapp-logging"
         };
 
         // Setup the jetty instance
-        try (JettyHomeTester.Run setup = jetty.start(args1))
+        try (JettyHomeTester.Run setup = jetty.start(setupArgs))
         {
             assertTrue(setup.awaitFor(5, TimeUnit.SECONDS));
             assertEquals(0, setup.getExitValue());
@@ -83,14 +83,14 @@ public class BasicDistroTest extends AbstractTest
 
             int httpPort = jetty.freePort();
 
-            String[] args = {
+            String[] runArgs = {
                 "jetty.http.port=" + httpPort
             };
 
             // Run the server instance
-            try (JettyHomeTester.Run run1 = jetty.start(args))
+            try (JettyHomeTester.Run run = jetty.start(runArgs))
             {
-                assertTrue(run1.awaitConsoleLogsFor("Started @", 20, TimeUnit.SECONDS));
+                assertTrue(run.awaitConsoleLogsFor("Started @", 3, TimeUnit.SECONDS));
 
                 HttpClient client = startHttpClient();
 

@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.http.HttpStatus;
-import org.eclipse.jetty.start.FS;
 import org.eclipse.jetty.toolchain.test.MavenTestingUtils;
 import org.junit.jupiter.api.Test;
 import org.mortbay.jetty.tests.releases.JettyHomeTester;
@@ -49,75 +48,76 @@ public class RollingFileLogDistroTest extends AbstractTest
     @Test
     public void testLogging() throws Exception
     {
+        final String rollingFilenameRegex = "jetty-roll-2[0-9][0-9][0-9]-[01][0-9]-[0-3][0-9]_[012][0-9]-[0-5][0-9].log";
+
         JettyHomeTester jetty = JettyHomeTester.Builder.newInstance()
             .jettyVersion(getJettyVersion())
-            .mavenLocalRepository(System.getProperty("mavenRepoPath"))
+            .mavenLocalRepository(getMavenLocalRepoPath())
             .build();
 
-        // Copy Test Wars & Configs
-        for (String context : CONTEXTS)
-        {
-            File warFile = jetty.resolveArtifact("org.mortbay.jetty.testwars:" + context + ":" + TEST_WAR_VERSION + ":war");
-            jetty.installWarFile(warFile, context);
-            File configJarFile = jetty.resolveArtifact("org.mortbay.jetty.testwars:" + context + ":" + TEST_WAR_VERSION + ":jar:config");
-            jetty.installConfigurationJar(configJarFile);
-        }
-
-        // Copy Slf4j Libs
-        Path libLogging = jetty.getJettyBase().resolve("lib/logging");
-        FS.ensureDirectoryExists(libLogging);
-        jetty.installJarLib("org.slf4j:slf4j-api", libLogging);
-        jetty.installJarLib("org.slf4j:jcl-over-slf4j", libLogging);
-        jetty.installJarLib("org.slf4j:jul-to-slf4j", libLogging);
-        jetty.installJarLib("org.slf4j:log4j-over-slf4j", libLogging);
-
-        // Copy Logback Libs
-        jetty.installJarLib("ch.qos.logback:logback-core", libLogging);
-        jetty.installJarLib("ch.qos.logback:logback-classic", libLogging);
-
-        // Copy webapp logging lib
-        jetty.installJarLib("org.mortbay.jetty.extras:jetty-webapp-logging", libLogging);
-        File configJarFile = jetty.resolveArtifact("org.mortbay.jetty.extras:jetty-webapp-logging:jar:config");
+        // Unpack logging config
+        File configJarFile = jetty.resolveArtifact("org.mortbay.jetty.extras:jetty-webapp-logging:jar:config:" + getProjectVersion());
         jetty.installConfigurationJar(configJarFile);
 
-        // Overlay Manual Config
-        Path basicDir = MavenTestingUtils.getTestResourcePathDir("rolling");
-        jetty.installConfigurationDir(basicDir);
-
-        int httpPort = jetty.freePort();
-
-        String[] args = {
-            "jetty.http.port=" + httpPort
+        String[] setupArgs = {
+            "--approve-all-licenses",
+            "--add-to-start=http,deploy,centralized-webapp-logging"
         };
 
-        Path logsDir = jetty.getJettyBase().resolve("logs");
-        LogAssert.assertNoLogsRegex(logsDir, "jetty-roll-20[0-9][0-9]-[01][0-9]-[0-3][0-9]_[012][0-9]-[0-5][0-9].log");
-
-        try (JettyHomeTester.Run run1 = jetty.start(args))
+        // Setup the jetty instance
+        try (JettyHomeTester.Run setup = jetty.start(setupArgs))
         {
-            assertTrue(run1.awaitConsoleLogsFor("Started @", 20, TimeUnit.SECONDS));
+            assertTrue(setup.awaitFor(5, TimeUnit.SECONDS));
+            assertEquals(0, setup.getExitValue());
 
-            HttpClient client = startHttpClient();
-
-            long now = System.currentTimeMillis();
-            long duration = (long)(1000 * 60 * (1.5)); // 1.5 minutes
-            long end = now + duration;
-            long left;
-            while (System.currentTimeMillis() < end)
+            // Copy Test Wars & Configs
+            for (String context : CONTEXTS)
             {
-                left = (end - System.currentTimeMillis());
-                System.out.printf("%,d milliseconds left%n", left);
-                for (String context : CONTEXTS)
+                File warFile = jetty.resolveArtifact("org.mortbay.jetty.testwars:" + context + ":war:" + TEST_WAR_VERSION);
+                jetty.installWarFile(warFile, context);
+                configJarFile = jetty.resolveArtifact("org.mortbay.jetty.testwars:" + context + ":jar:config:" + TEST_WAR_VERSION);
+                jetty.installConfigurationJar(configJarFile);
+            }
+
+            // Overlay Manual Config
+            Path rollingDir = MavenTestingUtils.getTestResourcePathDir("rolling");
+            jetty.installConfigurationDir(rollingDir);
+
+            int httpPort = jetty.freePort();
+
+            String[] runArgs = {
+                "jetty.http.port=" + httpPort
+            };
+
+            Path logsDir = jetty.getJettyBase().resolve("logs");
+            LogAssert.assertNoLogsRegex(logsDir, rollingFilenameRegex);
+
+            try (JettyHomeTester.Run run = jetty.start(runArgs))
+            {
+                assertTrue(run.awaitConsoleLogsFor("Started @", 20, TimeUnit.SECONDS));
+
+                HttpClient client = startHttpClient();
+
+                long now = System.currentTimeMillis();
+                long duration = (long)(1000 * 60 * (1.5)); // 1.5 minutes
+                long end = now + duration;
+                long left;
+                while (System.currentTimeMillis() < end)
                 {
-                    ContentResponse response = client.GET("http://localhost:" + httpPort + "/" + context + "/logging");
-                    assertEquals(HttpStatus.OK_200, response.getStatus());
-                    assertThat(response.getContentAsString(), containsString("PathInfo"));
-                    assertThat(response.getContentAsString(), not(containsString("<%")));
+                    left = (end - System.currentTimeMillis());
+                    System.out.printf("%,d milliseconds left%n", left);
+                    for (String context : CONTEXTS)
+                    {
+                        ContentResponse response = client.GET("http://localhost:" + httpPort + "/" + context + "/logging");
+                        assertEquals(HttpStatus.OK_200, response.getStatus());
+                        assertThat(response.getContentAsString(), not(containsString("Exception")));
+                    }
+                    Thread.sleep(Math.min(20000, left)); // every 20s.
                 }
-                Thread.sleep(Math.min(20000, left)); // every 20s.
             }
         }
 
-        LogAssert.assertLogExistsRegex(logsDir, "jetty-roll-20[0-9][0-9]-[01][0-9]-[0-3][0-9]_[012][0-9]-[0-5][0-9].log");
+        Path logsDir = jetty.getJettyBase().resolve("logs");
+        LogAssert.assertLogExistsRegex(logsDir, rollingFilenameRegex);
     }
 }

@@ -105,7 +105,7 @@ public class LogAssert
         List<Path> forbiddenMatches = Files.list(logDir)
             .filter((logFile) ->
             {
-                String logFileName = logFile.toString();
+                String logFileName = logFile.getFileName().toString();
                 return pat.matcher(logFileName).matches();
             })
             .collect(Collectors.toList());
@@ -124,7 +124,7 @@ public class LogAssert
         List<Path> matches = Files.list(logDir)
             .filter((logFile) ->
             {
-                String logFileName = logFile.toString();
+                String logFileName = logFile.getFileName().toString();
                 return pat.matcher(logFileName).matches();
             })
             .collect(Collectors.toList());
