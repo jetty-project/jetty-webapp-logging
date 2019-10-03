@@ -16,7 +16,7 @@
 //  ========================================================================
 //
 
-package org.mortbay.jetty.webapp.logging.tests;
+package org.eclipse.jetty.webapp.logging.tests;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -24,10 +24,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.tests.JettyHomeTester;
 import org.eclipse.jetty.toolchain.test.MavenTestingUtils;
 import org.junit.jupiter.api.Test;
-import org.mortbay.jetty.tests.releases.JettyHomeTester;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -35,20 +34,14 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MultiLoggingDistroTest extends AbstractTest
+public class BasicDistroTest extends AbstractTest
 {
     private static final String[] CONTEXTS =
         {
-            "test-war-commons_logging_1.0.3",
             "test-war-commons_logging_1.1",
             "test-war-java_util_logging",
             "test-war-log4j_1.2.15",
-            "test-war-log4j_1.1.3",
-            "test-war-slf4j_1.2",
-            "test-war-slf4j_1.5.6",
-            "test-war-slf4j_1.6.1",
-            "test-war-slf4j_1.6.6",
-            "test-war-slf4j_1.7.2"
+            "test-war-slf4j_1.5.6"
         };
 
     @Test
@@ -60,7 +53,7 @@ public class MultiLoggingDistroTest extends AbstractTest
             .build();
 
         // Unpack logging config
-        File configJarFile = jetty.resolveArtifact("org.mortbay.jetty.extras:jetty-webapp-logging:jar:config:" + getProjectVersion());
+        File configJarFile = jetty.resolveArtifact("org.eclipse.jetty:jetty-webapp-logging:jar:config:" + getProjectVersion());
         jetty.installConfigurationJar(configJarFile);
 
         String[] setupArgs = {
@@ -84,8 +77,8 @@ public class MultiLoggingDistroTest extends AbstractTest
             }
 
             // Overlay Manual Config
-            Path multiDir = MavenTestingUtils.getTestResourcePathDir("multi");
-            jetty.installConfigurationDir(multiDir);
+            Path basicDir = MavenTestingUtils.getTestResourcePathDir("basic");
+            jetty.installConfigurationDir(basicDir);
 
             int httpPort = jetty.freePort();
 
@@ -93,6 +86,7 @@ public class MultiLoggingDistroTest extends AbstractTest
                 "jetty.http.port=" + httpPort
             };
 
+            // Run the server instance
             try (JettyHomeTester.Run run = jetty.start(runArgs))
             {
                 assertTrue(run.awaitConsoleLogsFor("Started @", 3, TimeUnit.SECONDS));
@@ -102,13 +96,13 @@ public class MultiLoggingDistroTest extends AbstractTest
                 for (String context : CONTEXTS)
                 {
                     ContentResponse response = client.GET("http://localhost:" + httpPort + "/" + context + "/logging");
-                    assertEquals(HttpStatus.OK_200, response.getStatus());
+                    assertHttpResponseOK(response);
                     assertThat(response.getContentAsString(), not(containsString("Exception")));
                 }
             }
-        }
 
-        Path logFile = jetty.getJettyBase().resolve("logs/jetty-central.log");
-        LogAssert.assertContainsEntries(logFile, "expected-multi.txt");
+            Path logFile = jetty.getJettyBase().resolve("logs/jetty-central.log");
+            LogAssert.assertContainsEntries(logFile, "expected-basic.txt");
+        }
     }
 }

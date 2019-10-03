@@ -16,7 +16,7 @@
 //  ========================================================================
 //
 
-package org.mortbay.jetty.webapp.logging.tests;
+package org.eclipse.jetty.webapp.logging.tests;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -25,10 +25,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.tests.JettyHomeTester;
 import org.eclipse.jetty.toolchain.test.MavenTestingUtils;
 import org.junit.jupiter.api.Test;
-import org.mortbay.jetty.tests.releases.JettyHomeTester;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -57,7 +56,7 @@ public class RollingFileLogDistroTest extends AbstractTest
             .build();
 
         // Unpack logging config
-        File configJarFile = jetty.resolveArtifact("org.mortbay.jetty.extras:jetty-webapp-logging:jar:config:" + getProjectVersion());
+        File configJarFile = jetty.resolveArtifact("org.eclipse.jetty:jetty-webapp-logging:jar:config:" + getProjectVersion());
         jetty.installConfigurationJar(configJarFile);
 
         String[] setupArgs = {
@@ -108,7 +107,7 @@ public class RollingFileLogDistroTest extends AbstractTest
                     for (String context : CONTEXTS)
                     {
                         ContentResponse response = client.GET("http://localhost:" + httpPort + "/" + context + "/logging");
-                        assertEquals(HttpStatus.OK_200, response.getStatus());
+                        assertHttpResponseOK(response);
                         assertThat(response.getContentAsString(), not(containsString("Exception")));
                     }
                     Thread.sleep(Math.min(every.toMillis(), duration.toMillis()));

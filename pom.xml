@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.eclipse.jetty</groupId>
-    <artifactId>jetty-parent</artifactId>
-    <version>20</version>
-  </parent>
 
-  <groupId>org.mortbay.jetty.extras</groupId>
+  <groupId>org.eclipse.jetty</groupId>
   <artifactId>jetty-webapp-logging-parent</artifactId>
-  <version>9.4-SNAPSHOT</version>
+  <version>9.4.x-SNAPSHOT</version>
   <name>Jetty :: Parent :: Centralized WebApp Logging</name>
   <packaging>pom</packaging>
 
+  <url>http://www.eclipse.org/jetty/</url>
+  <inceptionYear>1995</inceptionYear>
+  <organization>
+    <name>Mort Bay Consulting</name>
+    <url>http://www.mortbay.com</url>
+  </organization>
+
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty.version>9.4.20.v20190813</jetty.version>
     <slf4j.version>1.7.25</slf4j.version>
     <logback.version>1.2.3</logback.version>
@@ -31,10 +34,15 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:jetty-project/jetty-webapp-logging.git</connection>
+    <connection>scm:git:https://github.com/jetty-project/jetty-webapp-logging.git</connection>
     <developerConnection>scm:git:git@github.com:jetty-project/jetty-webapp-logging.git</developerConnection>
-    <url>http://github.com/jetty-project/jetty-webapp-logging</url>
+    <url>https://github.com/jetty-project/jetty-webapp-logging</url>
   </scm>
+
+  <issueManagement>
+    <system>github</system>
+    <url>https://github.com/jetty-project/jetty-webapp-logging/issues</url>
+  </issueManagement>
 
   <modules>
     <module>jetty-home-tester</module>
@@ -46,7 +54,9 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.6.2</version>
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
@@ -66,6 +76,11 @@
               <project.version>${project.version}</project.version>
             </systemPropertyVariables>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.6</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -94,6 +109,127 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.4</version>
+        <executions>
+          <execution>
+            <id>create-help-mojo</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <source>8</source>
+          <charset>UTF-8</charset>
+          <docencoding>UTF-8</docencoding>
+          <encoding>UTF-8</encoding>
+          <docfilessubdirs>true</docfilessubdirs>
+          <detectLinks>false</detectLinks>
+          <detectJavaApiLink>false</detectJavaApiLink>
+          <show>protected</show>
+          <attach>true</attach>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <arguments>-Peclipse-release</arguments>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>jdk11</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <configuration>
+                <additionalJOption>--no-module-directories</additionalJOption>
+                <additionalOptions>-html5</additionalOptions>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>release-sign-artifact</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <distributionManagement>
+    <repository>
+      <id>oss.sonatype.org</id>
+      <name>Jetty Staging Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+      <id>oss.sonatype.org</id>
+      <name>Jetty Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/jetty-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>

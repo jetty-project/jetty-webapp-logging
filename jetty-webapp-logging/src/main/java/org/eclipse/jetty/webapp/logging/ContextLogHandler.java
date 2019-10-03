@@ -16,7 +16,7 @@
 //  ========================================================================
 //
 
-package org.mortbay.jetty.webapp.logging;
+package org.eclipse.jetty.webapp.logging;
 
 import java.io.IOException;
 import java.security.Principal;

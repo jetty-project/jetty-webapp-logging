@@ -1,4 +1,4 @@
-package org.mortbay.jetty.webapp.logging.tests;
+package org.eclipse.jetty.webapp.logging.tests;
 
 import java.io.BufferedReader;
 import java.io.File;

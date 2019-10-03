@@ -16,14 +16,18 @@
 //  ========================================================================
 //
 
-package org.mortbay.jetty.webapp.logging.tests;
+package org.eclipse.jetty.webapp.logging.tests;
 
 import java.nio.file.Paths;
 
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.util.StringUtil;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.junit.jupiter.api.AfterEach;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractTest
 {
@@ -88,5 +92,17 @@ public abstract class AbstractTest
     public void stopClient()
     {
         LifeCycle.stop(client);
+    }
+
+    protected void assertHttpResponseOK(ContentResponse response)
+    {
+        if (response.getStatus() != HttpStatus.OK_200)
+        {
+            System.err.printf("Requested: %s%n", response.getRequest().getURI());
+            System.err.printf("%s %s %s%n", response.getVersion(), response.getStatus(), response.getReason());
+            System.err.println(response.getHeaders());
+            System.err.println(response.getContentAsString());
+            assertEquals(HttpStatus.OK_200, response.getStatus());
+        }
     }
 }

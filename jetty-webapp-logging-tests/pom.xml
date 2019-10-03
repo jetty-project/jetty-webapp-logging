@@ -3,15 +3,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.mortbay.jetty.extras</groupId>
+    <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-webapp-logging-parent</artifactId>
-    <version>9.4-SNAPSHOT</version>
+    <version>9.4.x-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.mortbay.jetty.extras</groupId>
+  <groupId>org.eclipse.jetty</groupId>
   <artifactId>jetty-webapp-logging-tests</artifactId>
-  <version>9.4-SNAPSHOT</version>
+  <version>9.4.x-SNAPSHOT</version>
   <name>Jetty :: Tests :: Centralized WebApp Logging</name>
   <packaging>jar</packaging>
 
@@ -30,7 +30,7 @@
   <dependencies>
     <!-- Test Scope -->
     <dependency>
-      <groupId>org.mortbay.jetty.extras</groupId>
+      <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp-logging</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -42,7 +42,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.mortbay.jetty.extras</groupId>
+      <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-home-tester</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

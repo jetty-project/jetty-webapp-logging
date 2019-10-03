@@ -16,7 +16,7 @@
 //  ========================================================================
 //
 
-package org.mortbay.jetty.tests.releases;
+package org.eclipse.jetty.tests;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -234,7 +234,7 @@ public class JettyHomeTester
     /**
      * Resolves an artifact given its Maven coordinates.
      *
-     * @param coordinates &lt;groupId>:&lt;artifactId>[:&lt;extension>[:&lt;classifier>]]:&lt;version>
+     * @param coordinates {@code <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>}
      * @return the artifact
      * @see #installWarFile(File, String)
      */

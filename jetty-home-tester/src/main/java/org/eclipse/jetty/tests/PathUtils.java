@@ -16,7 +16,7 @@
 //  ========================================================================
 //
 
-package org.mortbay.jetty.tests.releases;
+package org.eclipse.jetty.tests;
 
 import java.io.IOException;
 import java.nio.file.Files;

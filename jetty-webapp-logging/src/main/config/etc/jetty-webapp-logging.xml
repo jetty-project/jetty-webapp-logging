@@ -8,7 +8,7 @@
   <Ref refid="DeploymentManager">
     <Call name="addLifeCycleBinding">
       <Arg>
-        <New class="org.mortbay.jetty.webapp.logging.CentralizedWebAppLoggingBinding">
+        <New class="org.eclipse.jetty.webapp.logging.CentralizedWebAppLoggingBinding">
         </New>
       </Arg>
     </Call>
