@@ -94,7 +94,7 @@ public class RollingFileLogDistroTest extends AbstractTest
 
             try (JettyHomeTester.Run run = jetty.start(runArgs))
             {
-                assertTrue(run.awaitConsoleLogsFor("Started @", 20, TimeUnit.SECONDS));
+                assertTrue(run.awaitConsoleLogsFor("Started @", 3, TimeUnit.SECONDS));
 
                 HttpClient client = startHttpClient();
 
