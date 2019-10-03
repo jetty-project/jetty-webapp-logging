@@ -2,14 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+  </parent>
+
   <groupId>org.eclipse.jetty</groupId>
   <artifactId>jetty-webapp-logging-parent</artifactId>
   <version>9.4.x-SNAPSHOT</version>
   <name>Jetty :: Parent :: Centralized WebApp Logging</name>
   <packaging>pom</packaging>
+  <description>Jetty :: Centralized WebApp Logging</description>
 
   <url>http://www.eclipse.org/jetty/</url>
   <inceptionYear>1995</inceptionYear>
+
   <organization>
     <name>Mort Bay Consulting</name>
     <url>http://www.mortbay.com</url>
@@ -49,6 +57,17 @@
     <module>jetty-webapp-logging</module>
     <module>jetty-webapp-logging-tests</module>
   </modules>
+
+  <developers>
+    <developer>
+      <id>joakime</id>
+      <name>Joakim Erdfelt</name>
+      <email>joakim.erdfelt@gmail.com</email>
+      <organization>Webtide, LLC</organization>
+      <organizationUrl>https://webtide.com</organizationUrl>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
 
   <build>
     <pluginManagement>
@@ -104,7 +123,7 @@
                   <version>[1.8,)</version>
                   <message>[ERROR] OLD JDK [${java.version}] in use. Jetty ${project.version} requires JDK 1.7 or newer</message>
                 </requireJavaVersion>
-             </rules>
+              </rules>
             </configuration>
           </execution>
         </executions>
