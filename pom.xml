@@ -167,7 +167,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <useReleaseProfile>false</useReleaseProfile>
           <goals>javadoc:aggregate-jar deploy</goals>
-          <arguments>-Peclipse-release</arguments>
+          <arguments>-Peclipse-release -DskipTests</arguments>
           <preparationGoals>clean install</preparationGoals>
           <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
