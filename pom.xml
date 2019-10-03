@@ -10,7 +10,7 @@
 
   <groupId>org.eclipse.jetty</groupId>
   <artifactId>jetty-webapp-logging-parent</artifactId>
-  <version>9.4.x-SNAPSHOT</version>
+  <version>9.4.20.v20190813</version>
   <name>Jetty :: Parent :: Centralized WebApp Logging</name>
   <packaging>pom</packaging>
   <description>Jetty :: Centralized WebApp Logging</description>
@@ -45,6 +45,7 @@
     <connection>scm:git:https://github.com/jetty-project/jetty-webapp-logging.git</connection>
     <developerConnection>scm:git:git@github.com:jetty-project/jetty-webapp-logging.git</developerConnection>
     <url>https://github.com/jetty-project/jetty-webapp-logging</url>
+    <tag>jetty-webapp-logging-9.4.20.v20190813</tag>
   </scm>
 
   <issueManagement>

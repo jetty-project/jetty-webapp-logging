@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-webapp-logging-parent</artifactId>
-    <version>9.4.x-SNAPSHOT</version>
+    <version>9.4.20.v20190813</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>org.eclipse.jetty.tests</groupId>
   <artifactId>jetty-home-tester</artifactId>
-  <version>9.4.x-SNAPSHOT</version>
+  <version>9.4.20.v20190813</version>
   <name>Jetty :: jetty-home Tester lib</name>
   <packaging>jar</packaging>
   <properties>
