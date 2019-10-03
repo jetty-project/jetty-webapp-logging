@@ -164,7 +164,12 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
         <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <goals>javadoc:aggregate-jar deploy</goals>
           <arguments>-Peclipse-release</arguments>
+          <preparationGoals>clean install</preparationGoals>
+          <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
       </plugin>
     </plugins>
