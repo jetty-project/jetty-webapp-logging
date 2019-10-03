@@ -42,7 +42,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>org.eclipse.jetty.tests</groupId>
       <artifactId>jetty-home-tester</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

@@ -9,6 +9,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
+  <groupId>org.eclipse.jetty.tests</groupId>
   <artifactId>jetty-home-tester</artifactId>
   <version>9.4.x-SNAPSHOT</version>
   <name>Jetty :: jetty-home Tester lib</name>
