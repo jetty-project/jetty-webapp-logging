@@ -43,9 +43,13 @@ public class CentralizedWebAppLoggingBinding implements AppLifeCycle.Binding
         if (handler instanceof WebAppContext)
         {
             WebAppContext webapp = (WebAppContext)handler;
-            webapp.addSystemClass("org.apache.log4j.");
-            webapp.addSystemClass("org.slf4j.");
-            webapp.addSystemClass("org.apache.commons.logging.");
+            webapp.getSystemClasspathPattern().add("org.apache.log4j.");
+            webapp.getSystemClasspathPattern().add("org.slf4j.");
+            webapp.getSystemClasspathPattern().add("org.apache.commons.logging.");
+
+            webapp.getServerClasspathPattern().add("-org.apache.log4j.");
+            webapp.getServerClasspathPattern().add("-org.slf4j.");
+            webapp.getServerClasspathPattern().add("-org.apache.commons.logging.");
         }
     }
 }

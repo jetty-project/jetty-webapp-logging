@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractTest
 {
-    public static final String JETTY_VERSION = "9.4.20.v20190813";
+    public static final String JETTY_VERSION = "9.4.27.v20200227";
     public static final String TEST_WAR_VERSION = "9.0.0.v20130315";
 
     private HttpClient client;

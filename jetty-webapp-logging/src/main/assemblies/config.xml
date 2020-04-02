@@ -12,6 +12,16 @@
       <includes>
         <include>**</include>
       </includes>
+      <excludes>
+        <exclude>modules/centralized-webapp-logging.mod</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>src/main/config/modules/centralized-webapp-logging.mod</source>
+      <outputDirectory>/modules/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+  </files>
 </assembly>
